@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">yc_base</string>
+    <string name="setting">设置</string>
+    <string name="resume">Resume</string>
+    <string name="cancel">取消</string>
+    <string name="title_dialog">Tips</string>
+    <string name="not_wx_pay">您未安装最新版本微信，不支持微信支付，请安装或升级微信版本</string>
+
+
+</resources>
