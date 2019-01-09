@@ -5,6 +5,9 @@
     <string name="cancel">取消</string>
     <string name="title_dialog">Tips</string>
     <string name="not_wx_pay">您未安装最新版本微信，不支持微信支付，请安装或升级微信版本</string>
+    <string name="message_permission_rationale">授予下列权限以继续程序:\n\n%1$s</string>
+    <string name="message_overlay_failed">您的电话不允许我们使用其他应用程序.</string>
+    <string name="message_permission_always_failed">我们需要以下权限，请在设置中为我们开启：\n\n%1$s</string>
 
 
 </resources>

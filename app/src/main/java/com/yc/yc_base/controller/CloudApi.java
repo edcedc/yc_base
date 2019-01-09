@@ -8,6 +8,12 @@ import com.lzy.okgo.model.Response;
 import com.lzy.okgo.request.PostRequest;
 import com.lzy.okrx2.adapter.ObservableBody;
 import com.lzy.okrx2.adapter.ObservableResponse;
+import com.yc.yc_base.bean.BaseListBean;
+import com.yc.yc_base.bean.BaseResponseBean;
+import com.yc.yc_base.bean.DataBean;
+import com.yc.yc_base.callback.NewsCallback;
+import com.yc.yc_base.utils.Constants;
+import com.yc.yc_base.utils.cache.ShareSessionIdCache;
 
 import org.json.JSONObject;
 
@@ -45,4 +51,35 @@ public class CloudApi {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
 
+    /**
+     * 通用list数据
+     */
+    public static Observable<Response<BaseResponseBean<BaseListBean<DataBean>>>> list(int pageNumber, String url) {
+        return OkGo.<BaseResponseBean<BaseListBean<DataBean>>>post(SERVLET_URL + url)
+                .params("pageNumber", pageNumber)
+                .params("pageSize", Constants.pageSize)
+                .params("sessionId", ShareSessionIdCache.getInstance(Utils.getApp()).getSessionId())
+                .converter(new NewsCallback<BaseResponseBean<BaseListBean<DataBean>>>() {
+                    @Override
+                    public void onSuccess(Response<BaseResponseBean<BaseListBean<DataBean>>> response) {
+
+                    }
+                })
+                .adapt(new ObservableResponse<BaseResponseBean<BaseListBean<DataBean>>>())
+                .subscribeOn(Schedulers.io());
+    }
+    /**
+     * 通用list 2
+     */
+    public static Observable<Response<BaseResponseBean<List<DataBean>>>> list2(String url) {
+        return OkGo.<BaseResponseBean<List<DataBean>>>post(SERVLET_URL + url)
+                .params("sessionId", ShareSessionIdCache.getInstance(Utils.getApp()).getSessionId())
+                .converter(new NewsCallback<BaseResponseBean<List<DataBean>>>() {
+                    @Override
+                    public void onSuccess(Response<BaseResponseBean<List<DataBean>>> response) {
+                    }
+                })
+                .adapt(new ObservableResponse<BaseResponseBean<List<DataBean>>>())
+                .subscribeOn(Schedulers.io());
+    }
 }
