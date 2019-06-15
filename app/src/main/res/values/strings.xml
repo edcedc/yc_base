@@ -8,9 +8,6 @@
     <string name="message_permission_rationale">授予下列权限以继续程序:\n\n%1$s</string>
     <string name="message_overlay_failed">您的电话不允许我们使用其他应用程序.</string>
     <string name="message_permission_always_failed">我们需要以下权限，请在设置中为我们开启：\n\n%1$s</string>
-    <string name="message_permission_rationale">授予下列权限以继续程序:\n\n%1$s</string>
-    <string name="message_overlay_failed">您的电话不允许我们使用其他应用程序.</string>
-    <string name="message_permission_always_failed">我们需要以下权限，请在设置中为我们开启：\n\n%1$s</string>
-
-
+    <string name="share_title">神奇动物世界</string>
+    <string name="share_content">抢红包，听故事，跟国宝合影</string>
 </resources>

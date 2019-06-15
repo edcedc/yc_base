@@ -31,7 +31,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.bingoogolapple.bgabanner.BGABanner;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -45,7 +44,7 @@ import com.yc.yc_base.weight.RuntimeRationale;
  * 版本：v1.0
  */
 
-public class SplashFrg extends BaseFragment<BasePresenter, FSplashBinding> implements BGABanner.Delegate, BGABanner.Adapter<ImageView, Integer> {
+public class SplashFrg extends BaseFragment<BasePresenter, FSplashBinding>   {
 
     public static SplashFrg newInstance() {
         Bundle args = new Bundle();
@@ -81,38 +80,11 @@ public class SplashFrg extends BaseFragment<BasePresenter, FSplashBinding> imple
     protected void initView(View view) {
         act = getActivity();
         setSofia(true);
-        mB.banner.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if (position == listImage.size() - 1) {
-                    handler.sendMessageDelayed(handler.obtainMessage(mHandle_splash), 1500);
-                } else {
-                    handler.removeMessages(mHandle_splash);
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
         handler.sendEmptyMessageDelayed(mHandle_permission, 1000);
     }
 
-    @Override
-    public void fillBannerItem(BGABanner banner, ImageView itemView, Integer model, int position) {
-        itemView.setBackgroundResource(model);
-    }
 
-    @Override
-    public void onBannerItemClick(BGABanner banner, View itemView, Object model, int position) {
-
-    }
 
     private Handler handler = new Handler() {
         @Override

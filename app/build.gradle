@@ -110,14 +110,16 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.7.1'
 
     //渐变式导航栏
-    implementation 'com.yanzhenjie:sofia:1.0.5'
+    implementation 'com.gyf.immersionbar:immersionbar:3.0.0-beta05'
 
     //选择自定义VIEW
     implementation 'com.flyco.roundview:FlycoRoundView_Lib:1.1.4@aar'
     implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
 
     //轮播图
-    implementation 'cn.bingoogolapple:bga-banner:2.2.4'
+    implementation 'com.youth.banner:banner:1.4.10'
+
+    //最新版本
 
     //MVP架构
     implementation 'com.hannesdorfmann.mosby:mvp:2.0.1'
@@ -141,13 +143,25 @@ dependencies {
 
     //微信支付
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+    //腾讯X5webview
     implementation files('libs/tbs_sdk_thirdapp_v3.6.0.1352_43618_sharewithdownload_withoutGame_obfs_20180918_120327.jar')
-    implementation files('libs/alipaySdk-20180601.jar')
+
+    // 支付宝 SDK AAR 包所需的配置
+    implementation (name: 'alipaySdk-15.6.0-20190226104053', ext: 'aar')
 
     //加载样式
-    compile project(path: ':Loaddatalayout')
+    implementation project(path: ':Loaddatalayout')
+    implementation project(path: ':library')
 
     //点击加载框
-    compile project(path: ':ToprightmenuLibrary')
-    implementation files('libs/umeng-share-core-6.9.3.jar')
+    implementation project(path: ':ToprightmenuLibrary')
+    //友盟分享加统计
+    implementation files('libs/umeng-common-2.0.2.jar')
+    implementation files('libs/umeng-analytics-8.0.2.jar')
+    implementation files('libs/umeng-share-core-6.9.4.jar')
+    implementation files('libs/umeng-share-QQ-simplify-6.9.4.jar')
+    implementation files('libs/umeng-share-sina-simplify-6.9.4.jar')
+    implementation files('libs/umeng-share-wechat-simplify-6.9.4.jar')
+    implementation files('libs/umeng-shareboard-widget-6.9.4.jar')
+    implementation files('libs/umeng-sharetool-6.9.4.jar')
 }

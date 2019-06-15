@@ -1,4 +1,4 @@
-/*
+package com.yc.yc_base.base;/*
  * Copyright 2016 jeasonlzy(廖子尧)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yc.yc_base.base;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -29,6 +28,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -38,10 +38,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.alipay.sdk.app.PayTask;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
@@ -49,19 +46,19 @@ import com.ganxin.library.LoadDataLayout;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout;
-import com.tencent.mm.opensdk.modelpay.PayReq;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
-import com.yanzhenjie.sofia.Sofia;
 import com.yc.yc_base.R;
+import com.yc.yc_base.base.BasePresenter;
 import com.yc.yc_base.event.PayInEvent;
 import com.yc.yc_base.utils.Constants;
 import com.yc.yc_base.utils.TUtil;
 import com.yc.yc_base.utils.pay.PayResult;
+import com.yc.yc_base.weight.GridDividerItemDecoration;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
+
 import java.util.Map;
+
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import me.yokeyword.fragmentation_swipeback.SwipeBackFragment;
@@ -97,6 +94,7 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
     protected VB mB;
     public P mPresenter;
     private LoadDataLayout swipeLoadDataLayout;
+    private TwinklingRefreshLayout refreshLayout;
 
 
     protected int pagerNumber = 1;//网络请求默认第一页
@@ -126,7 +124,6 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
             mPresenter.act = this.getActivity();
             this.initPresenter();
         }
-        api = WXAPIFactory.createWXAPI(act, Constants.WX_APPID);
         initParms(bundle);
         initView(rootView);
 
@@ -138,22 +135,7 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
     public abstract void initPresenter();
 
     protected void setSofia(boolean isFullScreen) {
-        if (!isFullScreen) {
-            Sofia.with(act)
-                    .statusBarLightFont()
-                    .invasionStatusBar()
-                    .statusBarBackgroundAlpha(0)
-                    .statusBarDarkFont()
-                    .statusBarBackground(ContextCompat.getColor(act, R.color.white))
-            ;
-        } else {
-            Sofia.with(act)
-                    .invasionStatusBar()
-//                    .invasionNavigationBar()
-                    .statusBarDarkFont()
-                    .statusBarBackgroundAlpha(0)
-            ;
-        }
+
     }
 
 
@@ -193,12 +175,23 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
         mHandler.sendEmptyMessage(handler_success);
     }
 
+    public void onError(Throwable e, String errorName) {
+        errorText(e, errorName);
+    }
     public void onError(Throwable e) {
+        errorText(e, null);
+    }
+    private void errorText(Throwable e, String errorName){
         if (null != e) {
             mHandler.sendEmptyMessage(handler_hide);
             mHandler.sendEmptyMessage(handler_success);
-            LogUtils.e(e.getMessage());
+            LogUtils.e(e.getMessage(), errorName);
             showToast(e.getMessage());
+            if (refreshLayout != null){
+                refreshLayout.finishRefreshing();
+                refreshLayout.finishLoadmore();
+                showError();
+            }
         }else{
             LogUtils.e("请求之外Throwable,断点");
         }
@@ -253,6 +246,11 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
                         swipeLoadDataLayout.setStatus(LoadDataLayout.EMPTY);
                     }
                     break;
+                case handler_error:
+                    if (swipeLoadDataLayout != null && pagerNumber == 1) {
+                        swipeLoadDataLayout.setStatus(LoadDataLayout.ERROR);
+                    }
+                    break;
                 case handler_loadData:
                     if (swipeLoadDataLayout != null) {
                         swipeLoadDataLayout.setStatus(LoadDataLayout.LOADING);
@@ -274,10 +272,11 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
                     if (TextUtils.equals(resultStatus, "9000")) {
                         // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
                         showToast("支付成功");
+                        LogUtils.e("支付成功");
                         EventBus.getDefault().post(new PayInEvent());
                     } else {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-                        showToast("支付失败");
+                        showToast("支付取消");
                     }
                     break;
             }
@@ -296,6 +295,10 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
         mHandler.sendEmptyMessage(handler_empty);
     }
 
+    private void showError(){
+        mHandler.sendEmptyMessage(handler_error);
+    }
+
     protected void setRefreshLayout(TwinklingRefreshLayout refreshLayout, RefreshListenerAdapter listener) {
 //        ProgressLayout headerView = new ProgressLayout(act);
 //        refreshLayout.setHeaderView(headerView);
@@ -308,6 +311,7 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
         refreshLayout.setMaxHeadHeight(240);
         refreshLayout.setOverScrollHeight(200);
         refreshLayout.setOnRefreshListener(listener);
+        this.refreshLayout = refreshLayout;
     }
 
     /**
@@ -399,31 +403,23 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
         LogUtils.d("onDetach");
     }
 
-
-    protected void setCenterTitle(String title) {
-        title(title, 0, null, -1);
-    }
-
-    protected void setCenterTitle(String title, int img) {
-        title(title, 0, null, img);
-    }
-    protected void setCenterTitle(String title, String rightText) {
-        title(title, 0, rightText, -1);
-    }
-
     protected void setTitle(String title) {
-        title(title, 1, null, -1);
+        title(title, null, -1, true);
     }
-
+    protected void setTitle(String title, int img) {
+        title(title, null, img, true);
+    }
     protected void setTitle(String title, String right) {
-        title(title, 2, right, -1);
+        title(title,  right, -1, true);
+    }
+    protected void setTitle(String title, boolean isBack) {
+        title(title,  null, -1, isBack);
+    }
+    protected void setTitle(String title, String right, boolean isBack) {
+        title(title, right, -1, isBack);
     }
 
-    protected void setTitle(String title, int rightImg) {
-        title(title, 1, null, rightImg);
-    }
-
-    private void title(String title, int type, String rightText, int img) {
+    private void title(String title, String rightText, int img, boolean isBack) {
         setSofia(false);
         final AppCompatActivity mAppCompatActivity = (AppCompatActivity) act;
         Toolbar toolbar = view.findViewById(R.id.toolbar);
@@ -432,75 +428,34 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
         FrameLayout topRightFy = view.findViewById(R.id.top_right_fy);
         //需要调用该函数才能设置toolbar的信息
         mAppCompatActivity.setSupportActionBar(toolbar);
-        switch (type) {
-            case 0:
-                mAppCompatActivity.getSupportActionBar().setTitle("");
-                topTitle.setVisibility(View.VISIBLE);
-                topTitle.setText(title);
-                toolbar.setNavigationIcon(null);
-                if (img != -1) {
-                    topRight.setVisibility(View.GONE);
-                    topRightFy.setVisibility(View.VISIBLE);
-                    topRightFy.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            setOnRightClickListener();
-                        }
-                    });
-                }else if (!StringUtils.isEmpty(rightText)){
-                    topRightFy.setVisibility(View.VISIBLE);
-                    topRight.setVisibility(View.VISIBLE);
-                    topRight.setText(rightText);
-                    topRightFy.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            setOnRightClickListener();
-                        }
-                    });
+        mAppCompatActivity.getSupportActionBar().setTitle("");
+        if (isBack){
+            toolbar.setNavigationIcon(R.mipmap.close);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    act.onBackPressed();
                 }
-                break;
-            case 1:
-                if (img != -1) {
-                    topTitle.setVisibility(View.GONE);
-                    topRight.setVisibility(View.VISIBLE);
-                    topRight.setBackgroundResource(img);
-                    topRightFy.setVisibility(View.VISIBLE);
-                }
-                mAppCompatActivity.getSupportActionBar().setTitle(title);
-                topTitle.setVisibility(View.GONE);
-//                topTitle.setText(title);
-                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        act.onBackPressed();
-                    }
-                });
-                topRightFy.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        setOnRightClickListener();
-                    }
-                });
-                break;
-            case 2:
-                topTitle.setVisibility(View.GONE);
-                mAppCompatActivity.getSupportActionBar().setTitle(title);
-                toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        act.onBackPressed();
-                    }
-                });
-                topRight.setText(rightText);
-                topRightFy.setVisibility(View.VISIBLE);
-                topRightFy.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        setOnRightClickListener();
-                    }
-                });
-                break;
+            });
+        }else {
+            toolbar.setNavigationIcon(null);
         }
+        topTitle.setText(title);
+        if (!StringUtils.isEmpty(rightText)){
+            topRightFy.setVisibility(View.VISIBLE);
+            topRight.setText(rightText);
+        }else if (img != -1){
+            topRightFy.setVisibility(View.VISIBLE);
+            topRight.setBackgroundResource(img);
+        }else {
+
+        }
+        topRightFy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setOnRightClickListener();
+            }
+        });
     }
 
     // 两次点击按钮之间的点击间隔不能少于1000毫秒
@@ -522,51 +477,19 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
         recyclerView.setLayoutManager(new LinearLayoutManager(act));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-
         recyclerView.setBackgroundColor(ContextCompat.getColor(act,R.color.white));
     }
 
-
-    //支付宝支付
-    public void pay(final String info){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                PayTask alipay = new PayTask(act);
-                Map<String, String> result = alipay.payV2(info,true);
-                Message msg = new Message();
-                msg.what = SDK_PAY_FLAG;
-                msg.obj = result;
-                mHandler.sendMessage(msg);
-            }
-        }).start();
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    protected void setRecyclerViewGridType(RecyclerView recyclerView, int spanCount, int height, int color){
+        recyclerView.setLayoutManager(new GridLayoutManager(act, spanCount));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setBackgroundColor(ContextCompat.getColor(act,R.color.white));
+        recyclerView.addItemDecoration(new GridDividerItemDecoration(height, ContextCompat.getColor(act,color)));
     }
 
-    protected IWXAPI api;
-    protected void wxPay(final JSONObject data){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (api.getWXAppSupportAPI() >= com.tencent.mm.opensdk.constants.Build.PAY_SUPPORTED_SDK_INT) {
-                    PayReq req = new PayReq();
-                    req.appId = data.optString("appid");
-                    req.partnerId = data.optString("partnerid");
-                    req.prepayId = data.optString("prepayid");
-                    req.nonceStr = data.optString("noncestr");
-                    req.timeStamp = data.optString("timestamp");
-                    req.packageValue = data.optString("package");
-                    req.sign = data.optString("sign");
-                    req.extData = "app data"; // optional
-                    api.sendReq(req);
-                }else {
-                    act.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            showToast(getResources().getString(R.string.not_wx_pay));
-                        }
-                    });
-                }
-            }
-        }).start();
-    }
+
+
+
 }

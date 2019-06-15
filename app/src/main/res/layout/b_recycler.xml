@@ -8,7 +8,7 @@
 
         <include layout="@layout/include_top" />
 
-        <com.ganxin.library.LoadDataLayout
+        <com.yc.yc_base.weight.LoadingLayout
             android:id="@+id/swipeLoadDataLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -28,7 +28,7 @@
 
             </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
 
-        </com.ganxin.library.LoadDataLayout>
+        </com.yc.yc_base.weight.LoadingLayout>
 
     </LinearLayout>
 

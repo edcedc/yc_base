@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import com.yanzhenjie.sofia.Sofia;
 import com.yc.yc_base.R;
 import com.yc.yc_base.view.SplashFrg;
 
@@ -30,10 +29,7 @@ public class SplashAct extends SupportActivity {
 //        if (AndroidWorkaround.checkDeviceHasNavigationBar(this)) {
 //            AndroidWorkaround.assistActivity(findViewById(android.R.id.content));
 //        }
-        Sofia.with(this)
-                .invasionStatusBar()
-                .statusBarBackground(Color.TRANSPARENT)
-                .navigationBarBackground(Color.TRANSPARENT);
+
         if (findFragment(SplashFrg.class) == null) {
             loadRootFragment(R.id.fl_container, SplashFrg.newInstance());
         }

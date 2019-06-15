@@ -378,3 +378,10 @@ public void onEventMainThread(**);
 -keep class com.alipay.tscenter.** { *; }
 -keep class com.ta.utdid2.** { *;}
 -keep class com.ut.device.** { *;}
+#ImmersionBar
+-keep class com.gyf.barlibrary.* {*;}
+ -dontwarn com.gyf.barlibrary.**
+ # banner 的混淆代码
+ -keep class com.youth.banner.** {
+     *;
+  }
