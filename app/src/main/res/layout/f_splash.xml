@@ -11,5 +11,16 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <com.youth.banner.Banner
+            android:id="@+id/banner"
+            app:is_auto_play="false"
+            app:indicator_margin="@dimen/px10"
+            app:indicator_width="@dimen/px10"
+            app:indicator_height="@dimen/px10"
+            app:indicator_drawable_selected="@drawable/selected_radius"
+            app:indicator_drawable_unselected="@drawable/unselected_radius"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
     </FrameLayout>
 </layout>

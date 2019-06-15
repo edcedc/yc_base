@@ -5,7 +5,7 @@ def releaseTime() {
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.fanwang.sg"
+        applicationId "com.yc.quzhaunfa"
 
         minSdkVersion rootProject.ext.minSdkVersion as Integer
         targetSdkVersion rootProject.ext.targetSdkVersion as Integer

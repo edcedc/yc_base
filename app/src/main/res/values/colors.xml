@@ -10,4 +10,7 @@
     <color name="tab_gray">#999999</color>
     <color name="tab_black">#111111</color>
 
+    <color name="red_EF402C">#EF402C</color>
+    <color name="gray_C1C9D6">#C1C9D6</color>
+
 </resources>
