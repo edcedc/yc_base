@@ -38,6 +38,7 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
+import ezy.ui.layout.LoadingLayout;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import me.yokeyword.fragmentation.SupportActivity;
@@ -54,6 +55,13 @@ public abstract class BaseActivity<P extends BasePresenter, VB extends ViewDataB
     protected VB mB;
     public P mPresenter;
 
+    public static LoadingLayout vLoading;
+
+    protected int pagerNumber = 1;//网络请求默认第一页
+    protected int mTotalPage;//网络请求当前几页
+    protected int TOTAL_COUNTER;//网络请求一共有几页
+
+    protected boolean isTopFrg = false;//记录是否onResum导航栏
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,6 +84,8 @@ public abstract class BaseActivity<P extends BasePresenter, VB extends ViewDataB
         initParms(bundle);
 
         initView();
+        vLoading = LoadingLayout.wrap(act);
+
         api = WXAPIFactory.createWXAPI(act, Constants.WX_APPID);
     }
 
@@ -186,6 +196,11 @@ public abstract class BaseActivity<P extends BasePresenter, VB extends ViewDataB
 
     private final int handler_load = 0;
     private final int handler_hide = 1;
+    private final int handler_empty = 2;
+    private final int handler_error = 3;
+    private final int handler_no_network = 4;
+    private final int handler_loadData = 5;
+    private final int handler_success = 6;
 
     private Handler mHandler = new Handler(){
         @Override
@@ -204,6 +219,24 @@ public abstract class BaseActivity<P extends BasePresenter, VB extends ViewDataB
                 case handler_hide:
                     if (dialog != null && dialog.isShowing()) {
                         dialog.dismiss();
+                    }
+                    if (vLoading != null) {
+                        vLoading.showContent();
+                    }
+                    break;
+                case handler_empty:
+                    if (vLoading != null) {
+                        vLoading.showEmpty();
+                    }
+                    break;
+                case handler_error:
+                    if (vLoading != null) {
+                        vLoading.showError();
+                    }
+                    break;
+                case handler_loadData:
+                    if (vLoading != null) {
+                        vLoading.showLoading();
                     }
                     break;
                 case SDK_PAY_FLAG: {
@@ -245,6 +278,18 @@ public abstract class BaseActivity<P extends BasePresenter, VB extends ViewDataB
         }
     };
 
+    public void showLoadDataing() {
+        mHandler.sendEmptyMessage(handler_loadData);
+    }
+
+    public void showLoadEmpty() {
+        mHandler.sendEmptyMessage(handler_empty);
+    }
+
+    public void showError(){
+        mHandler.sendEmptyMessage(handler_error);
+    }
+
     protected void showToast(final String str){
         act.runOnUiThread(new Runnable() {
             @Override
@@ -265,13 +310,13 @@ public abstract class BaseActivity<P extends BasePresenter, VB extends ViewDataB
         compositeDisposable.add(disposable);
     }
 
-    private void dispose() {
+    public void dispose() {
         if (compositeDisposable != null) compositeDisposable.dispose();
     }
 
     @Override
     protected void onDestroy() {
-        hideLoading();
+//        hideLoading();
         dispose();
         super.onDestroy();
     }

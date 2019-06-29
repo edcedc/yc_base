@@ -43,6 +43,7 @@ import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.ganxin.library.LoadDataLayout;
+import com.gyf.immersionbar.ImmersionBar;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout;
@@ -56,6 +57,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.Map;
 
+import ezy.ui.layout.LoadingLayout;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import me.yokeyword.fragmentation_swipeback.SwipeBackFragment;
@@ -90,16 +92,7 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
 
     protected VB mB;
     public P mPresenter;
-    private LoadDataLayout swipeLoadDataLayout;
     private TwinklingRefreshLayout refreshLayout;
-
-
-    protected int pagerNumber = 1;//网络请求默认第一页
-    protected int mTotalPage;//网络请求当前几页
-    protected int TOTAL_COUNTER;//网络请求一共有几页
-
-    protected boolean isTopFrg = false;//记录是否onResum导航栏
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -124,7 +117,6 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
         initParms(bundle);
         initView(rootView);
 
-        swipeLoadDataLayout = view.findViewById(R.id.swipeLoadDataLayout);
         return attachToSwipeBack(rootView);
     }
 
@@ -132,7 +124,11 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
     public abstract void initPresenter();
 
     protected void setSofia(boolean isFullScreen) {
+        if (!isFullScreen){
+            ImmersionBar.with(this).navigationBarColor(R.color.red_EF402C);
+        }else {
 
+        }
     }
 
 
@@ -161,15 +157,12 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
     }
 
 
-    private ProgressDialog dialog;
-
     public void showLoading() {
-        mHandler.sendEmptyMessage(handler_load);
+        ((BaseActivity)act).showLoading();
     }
 
     public void hideLoading() {
-        mHandler.sendEmptyMessage(handler_hide);
-        mHandler.sendEmptyMessage(handler_success);
+        ((BaseActivity)act).hideLoading();
     }
 
     public void onError(Throwable e, String errorName) {
@@ -180,8 +173,6 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
     }
     private void errorText(Throwable e, String errorName){
         if (null != e) {
-            mHandler.sendEmptyMessage(handler_hide);
-            mHandler.sendEmptyMessage(handler_success);
             LogUtils.e(e.getMessage(), errorName);
             showToast(e.getMessage());
             if (refreshLayout != null){
@@ -194,70 +185,14 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
         }
     }
 
-    private CompositeDisposable compositeDisposable;
 
-    public void addDisposable(Disposable disposable) {
-        if (compositeDisposable == null) {
-            compositeDisposable = new CompositeDisposable();
-        }
-        compositeDisposable.add(disposable);
-    }
-
-    private void dispose() {
-        if (compositeDisposable != null) compositeDisposable.dispose();
-    }
-
-    private final int handler_load = 0;
-    private final int handler_hide = 1;
-    private final int handler_empty = 2;
-    private final int handler_error = 3;
-    private final int handler_no_network = 4;
-    private final int handler_loadData = 5;
-    private final int handler_success = 6;
 
     private final int SDK_PAY_FLAG = 7;
-
-
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what) {
-                case handler_load:
-                    if (dialog != null && dialog.isShowing()) return;
-                    dialog = new ProgressDialog(act);
-                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    dialog.setCanceledOnTouchOutside(false);
-                    dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                    dialog.setMessage("请求网络中...");
-                    dialog.show();
-                    break;
-                case handler_hide:
-                    hideLoad2ing();
-                    if (dialog != null && dialog.isShowing()) {
-                        dialog.dismiss();
-                    }
-                    break;
-                case handler_empty:
-                    if (swipeLoadDataLayout != null && pagerNumber == 1) {
-                        swipeLoadDataLayout.setStatus(LoadDataLayout.EMPTY);
-                    }
-                    break;
-                case handler_error:
-                    if (swipeLoadDataLayout != null && pagerNumber == 1) {
-                        swipeLoadDataLayout.setStatus(LoadDataLayout.ERROR);
-                    }
-                    break;
-                case handler_loadData:
-                    if (swipeLoadDataLayout != null) {
-                        swipeLoadDataLayout.setStatus(LoadDataLayout.LOADING);
-                    }
-                    break;
-                case handler_success:
-                    if (swipeLoadDataLayout != null) {
-                        swipeLoadDataLayout.setStatus(LoadDataLayout.SUCCESS);
-                    }
-                    break;
                 case SDK_PAY_FLAG:
                     PayResult payResult = new PayResult((Map<String, String>) msg.obj);
                     /**
@@ -280,20 +215,16 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
         }
     };
 
-    private void hideLoad2ing() {
-        mHandler.sendEmptyMessage(handler_success);
-    }
-
     public void showLoadDataing() {
-        mHandler.sendEmptyMessage(handler_loadData);
+        ((BaseActivity)act).showLoadDataing();
     }
 
     public void showLoadEmpty() {
-        mHandler.sendEmptyMessage(handler_empty);
+        ((BaseActivity)act).showLoadEmpty();
     }
 
     private void showError(){
-        mHandler.sendEmptyMessage(handler_error);
+        ((BaseActivity)act).showError();
     }
 
     protected void setRefreshLayout(TwinklingRefreshLayout refreshLayout, RefreshListenerAdapter listener) {
@@ -389,7 +320,7 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
     @Override
     public void onDestroy() {
         hideLoading();
-        dispose();
+        ((BaseActivity)act).dispose();
         super.onDestroy();
         LogUtils.d("onDestroy");
     }
@@ -455,19 +386,6 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
         });
     }
 
-    // 两次点击按钮之间的点击间隔不能少于1000毫秒
-    private final int MIN_CLICK_DELAY_TIME = 1000;
-    private long lastClickTime;
-
-    protected boolean isFastClick() {
-        boolean flag = false;
-        long curClickTime = System.currentTimeMillis();
-        if ((curClickTime - lastClickTime) >= MIN_CLICK_DELAY_TIME) {
-            flag = true;
-        }
-        lastClickTime = curClickTime;
-        return flag;
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     protected void setRecyclerViewType(RecyclerView recyclerView){
@@ -487,6 +405,17 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
     }
 
 
+    private CompositeDisposable compositeDisposable;
 
+    public void addDisposable(Disposable disposable) {
+        if (compositeDisposable == null) {
+            compositeDisposable = new CompositeDisposable();
+        }
+        compositeDisposable.add(disposable);
+    }
+
+    public void dispose() {
+        if (compositeDisposable != null) compositeDisposable.dispose();
+    }
 
 }
