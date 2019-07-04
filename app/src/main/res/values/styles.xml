@@ -23,6 +23,17 @@
                 -->
     </style>
 
+    <style name="title_bar">
+        <item name="android:layout_height">20dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="LoadingLayoutStyle" parent="LoadingLayout.Style">
+        <item name="llEmptyImage">@mipmap/empty</item>
+        <item name="llErrorImage">@mipmap/error</item>
+    </style>
+
     <style name="AppTheme.AppBarLight" parent="ThemeOverlay.AppCompat.Light" >
         <!--<item name="colorPrimary">@color/gray_ffeff0f0</item>-->
         <!--<item name="colorPrimaryDark">@color/gray_ffeff0f0</item>-->

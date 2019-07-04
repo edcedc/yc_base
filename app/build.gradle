@@ -146,22 +146,11 @@ dependencies {
     //腾讯X5webview
     implementation files('libs/tbs_sdk_thirdapp_v3.6.0.1352_43618_sharewithdownload_withoutGame_obfs_20180918_120327.jar')
 
-    // 支付宝 SDK AAR 包所需的配置
-    implementation (name: 'alipaySdk-15.6.0-20190226104053', ext: 'aar')
 
     //加载样式
-    implementation project(path: ':Loaddatalayout')
     implementation project(path: ':library')
 
     //点击加载框
     implementation project(path: ':ToprightmenuLibrary')
-    //友盟分享加统计
-    implementation files('libs/umeng-common-2.0.2.jar')
-    implementation files('libs/umeng-analytics-8.0.2.jar')
-    implementation files('libs/umeng-share-core-6.9.4.jar')
-    implementation files('libs/umeng-share-QQ-simplify-6.9.4.jar')
-    implementation files('libs/umeng-share-sina-simplify-6.9.4.jar')
-    implementation files('libs/umeng-share-wechat-simplify-6.9.4.jar')
-    implementation files('libs/umeng-shareboard-widget-6.9.4.jar')
-    implementation files('libs/umeng-sharetool-6.9.4.jar')
+
 }

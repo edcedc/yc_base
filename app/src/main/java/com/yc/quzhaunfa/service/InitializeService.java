@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.Utils;
-import com.ganxin.library.LoadDataLayout;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.cache.CacheEntity;
 import com.lzy.okgo.cache.CacheMode;
@@ -16,9 +15,6 @@ import com.lzy.okgo.https.HttpsUtils;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 import com.lzy.okgo.model.HttpHeaders;
 import com.tencent.smtt.sdk.QbSdk;
-import com.umeng.analytics.MobclickAgent;
-import com.umeng.commonsdk.UMConfigure;
-import com.umeng.socialize.PlatformConfig;
 import com.yc.quzhaunfa.R;
 import com.yc.quzhaunfa.mar.MyApplication;
 import com.yc.quzhaunfa.utils.Constants;
@@ -69,7 +65,6 @@ public class InitializeService extends IntentService {
         initOkGo();
         initAutoSizeConfig();
         initQbSdk();
-        initLoad();
         initShare();
 //        LogUtils.getConfig().setLogSwitch(false);
         // 设置崩溃后自动重启 APP
@@ -78,13 +73,13 @@ public class InitializeService extends IntentService {
     }
 
     private void initShare() {
-        UMConfigure.init(this, Constants.ShareID, "Umeng", UMConfigure.DEVICE_TYPE_PHONE,null);
-        PlatformConfig.setWeixin(Constants.WX_APPID, Constants.WX_SECRER);
-        PlatformConfig.setQQZone(Constants.QQ_APPID, Constants.QQ_SECRET);
-        PlatformConfig.setSinaWeibo(Constants.WB_APPID, Constants.WB_SECRET, "https://api.weibo.com/oauth5/default.html");
-        //设置LOG开关，默认为false
-        UMConfigure.setLogEnabled(true);
-        MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO);
+//        UMConfigure.init(this, Constants.ShareID, "Umeng", UMConfigure.DEVICE_TYPE_PHONE,null);
+//        PlatformConfig.setWeixin(Constants.WX_APPID, Constants.WX_SECRER);
+//        PlatformConfig.setQQZone(Constants.QQ_APPID, Constants.QQ_SECRET);
+//        PlatformConfig.setSinaWeibo(Constants.WB_APPID, Constants.WB_SECRET, "https://api.weibo.com/oauth5/default.html");
+//        //设置LOG开关，默认为false
+//        UMConfigure.setLogEnabled(true);
+//        MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO);
     }
 
     private void initQbSdk() {
@@ -150,32 +145,6 @@ public class InitializeService extends IntentService {
         //当 App 中出现多进程, 并且您需要适配所有的进程, 就需要在 App 初始化时调用 initCompatMultiProcess()
         //在 Demo 中跳转的三方库中的 DefaultErrorActivity 就是在另外一个进程中, 所以要想适配这个 Activity 就需要调用 initCompatMultiProcess()
         AutoSize.initCompatMultiProcess(this);
-    }
-
-    private void initLoad() {
-        LoadDataLayout.getBuilder()
-                .setLoadingText(getString(R.string.custom_loading_text))
-                .setLoadingTextSize(16)
-                .setLoadingTextColor(R.color.colorPrimary)
-                //.setLoadingViewLayoutId(R.layout.custom_loading_view) //如果设置了自定义loading视图,上面三个方法失效
-                .setEmptyImgId(R.drawable.ic_empty)
-//                .setErrorImgId(R.drawable.ic_error)
-//                .setNoNetWorkImgId(R.drawable.ic_no_network)
-//                .setEmptyImageVisible(true)
-//                .setErrorImageVisible(true)
-//                .setNoNetWorkImageVisible(true)
-                .setEmptyText(getString(R.string.custom_empty_text))
-//                .setErrorText(getString(R.string.custom_error_text))
-//                .setNoNetWorkText(getString(R.string.custom_nonetwork_text))
-                .setAllTipTextSize(16)
-                .setAllTipTextColor(R.color.text_color_child)
-                .setAllPageBackgroundColor(R.color.pageBackground)
-                .setReloadBtnText(getString(R.string.custom_reloadBtn_text))
-                .setReloadBtnTextSize(16)
-                .setReloadBtnTextColor(R.color.colorPrimary)
-                .setReloadBtnBackgroundResource(R.drawable.selector_btn_normal)
-                .setReloadBtnVisible(false)
-                .setReloadClickArea(LoadDataLayout.FULL);
     }
 
     private void initOkGo() {

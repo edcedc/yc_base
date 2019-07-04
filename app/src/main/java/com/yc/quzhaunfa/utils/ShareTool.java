@@ -3,6 +3,7 @@ package com.yc.quzhaunfa.utils;
 import android.app.Activity;
 import android.graphics.Bitmap;
 
+/*
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.umeng.socialize.ShareAction;
@@ -18,10 +19,12 @@ import com.yc.quzhaunfa.R;
 
 import java.lang.ref.WeakReference;
 
+*/
 /**
  * Created by Administrator on 2018/5/11.
  *  分享工具
- */
+ *//*
+
 
 public class ShareTool {
 
@@ -46,7 +49,9 @@ public class ShareTool {
 //        throw new UnsupportedOperationException("u can't instantiate me...");
 //    }
 
-    /****************************分享***********************************/
+    */
+/****************************分享***********************************//*
+
     private ShareAction shareAction;
     private Activity act;
     public ShareAction shareAction(final Activity act, final String url) {
@@ -128,7 +133,8 @@ public class ShareTool {
 
         @Override
         public void onStart(SHARE_MEDIA platform) {
-            /*switch (platform){
+            */
+/*switch (platform){
                 case WEIXIN:
                     if (!IsInstallWeChatOrAliPay.isWeixinAvilible(act)){
                         ToastUtils.showShort("未安装微信客户端");
@@ -147,7 +153,8 @@ public class ShareTool {
                         return;
                     }
                     break;
-            }*/
+            }*//*
+
             ToastUtils.showShort(platform + " 正在启动");
         }
 
@@ -169,7 +176,9 @@ public class ShareTool {
     }
 
 
-    /****************************授权***********************************/
+    */
+/****************************授权***********************************//*
+
     public void Authorization(Activity act, UMAuthListener listener){
         boolean b = UMShareAPI.get(act).isAuthorize(act, SHARE_MEDIA.WEIXIN);
         if (b){
@@ -181,10 +190,13 @@ public class ShareTool {
         }
     }
 
-    /****************************登陆***********************************/
+    */
+/****************************登陆***********************************//*
+
     public void ShareLogin(Activity act){
 
     }
 
 
-}
+
+}*/
