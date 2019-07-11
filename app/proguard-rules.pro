@@ -381,7 +381,18 @@ public void onEventMainThread(**);
 #ImmersionBar
 -keep class com.gyf.barlibrary.* {*;}
  -dontwarn com.gyf.barlibrary.**
- # banner 的混淆代码
- -keep class com.youth.banner.** {
-     *;
-  }
+# banner 的混淆代码
+-keep class com.youth.banner.** {
+ *;
+}
+#友盟统计
+-keep class com.umeng.** {*;}
+
+-keepclassmembers class * {
+ public <init> (org.json.JSONObject);
+}
+
+-keepclassmembers enum * {
+  public static **[] values();
+  public static ** valueOf(java.lang.String);
+}

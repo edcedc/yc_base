@@ -1,8 +1,11 @@
 package com.yc.quzhaunfa;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.gyf.immersionbar.ImmersionBar;
+import com.umeng.socialize.UMShareAPI;
 import com.yc.quzhaunfa.base.BaseActivity;
 import com.yc.quzhaunfa.view.MainFrg;
 
@@ -30,4 +33,11 @@ public class MainActivity extends BaseActivity {
             loadRootFragment(R.id.fl_container, MainFrg.newInstance());
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
 }

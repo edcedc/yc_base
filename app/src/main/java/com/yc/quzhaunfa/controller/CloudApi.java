@@ -3,13 +3,17 @@ package com.yc.quzhaunfa.controller;
 import com.blankj.utilcode.util.Utils;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.model.Response;
+import com.lzy.okrx2.adapter.ObservableBody;
 import com.lzy.okrx2.adapter.ObservableResponse;
 import com.yc.quzhaunfa.bean.BaseListBean;
 import com.yc.quzhaunfa.bean.BaseResponseBean;
 import com.yc.quzhaunfa.bean.DataBean;
+import com.yc.quzhaunfa.callback.JsonConvert;
 import com.yc.quzhaunfa.callback.NewsCallback;
 import com.yc.quzhaunfa.utils.Constants;
 import com.yc.quzhaunfa.utils.cache.ShareSessionIdCache;
+
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -43,6 +47,19 @@ public class CloudApi {
     private CloudApi() {
         throw new UnsupportedOperationException("u can't instantiate me...");
     }
+
+    /**
+     *  获取微信登陆返回值
+     */
+    public static Observable<JSONObject> wxLogin(String openid, String access_token){
+        return OkGo.<JSONObject>get("https://api.weixin.qq.com/sns/userinfo")
+                .params("access_token", access_token)
+                .params("openid", openid)
+                .converter(new JsonConvert<JSONObject>() {})
+                .adapt(new ObservableBody<JSONObject>())
+                .subscribeOn(Schedulers.io());
+    }
+
 
     /**
      * 通用list数据

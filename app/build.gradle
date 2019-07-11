@@ -26,6 +26,8 @@ android {
     }
     buildTypes {
         release {
+            signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             // 混淆
             minifyEnabled true
             // Zipalign优化
@@ -44,8 +46,18 @@ android {
 
         debug {
             signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable true
             zipAlignEnabled false
+        }
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file('yyc.jks')
+            storePassword "123456"
+            keyAlias "ye"
+            keyPassword "123456"
         }
     }
 
@@ -143,14 +155,22 @@ dependencies {
 
     //微信支付
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+
+    //友盟统计
+    implementation  'com.umeng.umsdk:analytics:8.0.0'
+    implementation  'com.umeng.umsdk:common:2.0.0'
+
     //腾讯X5webview
     implementation files('libs/tbs_sdk_thirdapp_v3.6.0.1352_43618_sharewithdownload_withoutGame_obfs_20180918_120327.jar')
-
 
     //加载样式
     implementation project(path: ':library')
 
     //点击加载框
     implementation project(path: ':ToprightmenuLibrary')
-
+    implementation files('libs/umeng-share-core-6.9.6.jar')
+    implementation files('libs/umeng-share-QQ-simplify-6.9.6.jar')
+    implementation files('libs/umeng-share-sina-simplify-6.9.6.jar')
+    implementation files('libs/umeng-share-wechat-simplify-6.9.6.jar')
+    implementation files('libs/umeng-sharetool-6.9.6.jar')
 }

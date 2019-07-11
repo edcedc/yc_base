@@ -1,9 +1,9 @@
 package com.yc.quzhaunfa.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 
-/*
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.umeng.socialize.ShareAction;
@@ -19,20 +19,15 @@ import com.yc.quzhaunfa.R;
 
 import java.lang.ref.WeakReference;
 
-*/
 /**
  * Created by Administrator on 2018/5/11.
  *  分享工具
- *//*
-
+ */
 
 public class ShareTool {
 
     private static class LazyHolder {
         private static final ShareTool INSTANCE = new ShareTool();
-    }
-
-    private ShareTool() {
     }
 
     private Bitmap imgBitmap;
@@ -41,7 +36,15 @@ public class ShareTool {
         this.imgBitmap = imgBitmap;
     }
 
-    public static final ShareTool getInstance() {
+
+    private ShareTool() {
+    }
+
+    private static Activity act;
+
+
+    public static final ShareTool getInstance(Activity act_) {
+        act = act_;
         return LazyHolder.INSTANCE;
     }
 
@@ -49,20 +52,12 @@ public class ShareTool {
 //        throw new UnsupportedOperationException("u can't instantiate me...");
 //    }
 
-    */
-/****************************分享***********************************//*
-
-    private ShareAction shareAction;
-    private Activity act;
-    public ShareAction shareAction(final Activity act, final String url) {
+    /****************************分享***********************************/
+    public ShareAction shareAction(final String url) {
         LogUtils.e(url);
-        this.act = act;
-        return shareAction = new ShareAction(act).setDisplayList(
+        return new ShareAction(act).setDisplayList(
                 SHARE_MEDIA.WEIXIN,
-                SHARE_MEDIA.WEIXIN_CIRCLE,
-                SHARE_MEDIA.QQ,
-                SHARE_MEDIA.QZONE,
-                SHARE_MEDIA.SINA
+                SHARE_MEDIA.WEIXIN_CIRCLE
         )
                 .setShareboardclickCallback(new ShareBoardlistener() {
                     @Override
@@ -80,18 +75,50 @@ public class ShareTool {
 
                     @Override
                     protected void finalize() throws Throwable {
+                        LogUtils.e("finalize");
                         super.finalize();
                     }
                 });
     }
 
+    /**
+     *  指定分享
+     */
+    public void shareAppointAction(final Activity act, final SHARE_MEDIA share_media, final String url) {
+        LogUtils.e(url);
+        UMWeb web = new UMWeb(url);
+        web.setTitle(act.getString(R.string.share_title));
+        web.setDescription(act.getString(R.string.share_content));
+        web.setThumb(new UMImage(act, R.mipmap.login_logo));
+        new ShareAction(act).withMedia(web )
+                .setPlatform(share_media)
+                .setCallback(new UMShareListener() {
+                    @Override
+                    public void onStart(SHARE_MEDIA share_media) {
+                        LogUtils.e("onStart");
+                    }
+
+                    @Override
+                    public void onResult(SHARE_MEDIA share_media) {
+                        LogUtils.e("onResult");
+                    }
+
+                    @Override
+                    public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+                        LogUtils.e(throwable.getMessage());
+                    }
+
+                    @Override
+                    public void onCancel(SHARE_MEDIA share_media) {
+
+                    }
+                }).share();
+    }
+
     public ShareAction shareActionImage(final Activity act, final String url) {
-        return shareAction = new ShareAction(act).setDisplayList(
+        return new ShareAction(act).setDisplayList(
                 SHARE_MEDIA.WEIXIN,
-                SHARE_MEDIA.WEIXIN_CIRCLE,
-                SHARE_MEDIA.QQ,
-                SHARE_MEDIA.QZONE,
-                SHARE_MEDIA.SINA
+                SHARE_MEDIA.WEIXIN_CIRCLE
         )
                 .setShareboardclickCallback(new ShareBoardlistener() {
                     @Override
@@ -133,8 +160,7 @@ public class ShareTool {
 
         @Override
         public void onStart(SHARE_MEDIA platform) {
-            */
-/*switch (platform){
+            /*switch (platform){
                 case WEIXIN:
                     if (!IsInstallWeChatOrAliPay.isWeixinAvilible(act)){
                         ToastUtils.showShort("未安装微信客户端");
@@ -153,8 +179,7 @@ public class ShareTool {
                         return;
                     }
                     break;
-            }*//*
-
+            }*/
             ToastUtils.showShort(platform + " 正在启动");
         }
 
@@ -176,10 +201,8 @@ public class ShareTool {
     }
 
 
-    */
-/****************************授权***********************************//*
-
-    public void Authorization(Activity act, UMAuthListener listener){
+    /****************************授权***********************************/
+    public void Authorization(UMAuthListener listener){
         boolean b = UMShareAPI.get(act).isAuthorize(act, SHARE_MEDIA.WEIXIN);
         if (b){
             LogUtils.e("删除授权");
@@ -190,13 +213,10 @@ public class ShareTool {
         }
     }
 
-    */
-/****************************登陆***********************************//*
-
+    /****************************登陆***********************************/
     public void ShareLogin(Activity act){
 
     }
 
 
-
-}*/
+}

@@ -28,6 +28,8 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.UMShareAPI;
 import com.yc.quzhaunfa.R;
 import com.yc.quzhaunfa.base.BasePresenter;
 import com.yc.quzhaunfa.utils.Constants;
@@ -322,13 +324,17 @@ public abstract class BaseActivity<P extends BasePresenter, VB extends ViewDataB
     @Override
     public void onResume() {
         super.onResume();
-//        MobclickAgent.onResume(this);
+        MobclickAgent.onResume(this);
     }
     @Override
     public void onPause() {
         super.onPause();
-//        MobclickAgent.onPause(this);
+        MobclickAgent.onPause(this);
     }
+
+
+
+
 
     //支付宝支付
     public void pay(final String info){

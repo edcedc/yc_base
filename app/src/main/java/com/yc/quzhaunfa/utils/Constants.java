@@ -11,11 +11,9 @@ public class Constants {
    public static final int ITEMCOUNT = 10;
    public static final int pageSize = 10;
 
-   public static final int day_min = 86400;//一天秒数
-
-   public static final String ShareID = "5c46aafff1f556746800074b";
-   public static final String WX_APPID = "wx374c2b9226424da8";
-   public static final String WX_SECRER = "a9b45b184245c6456902023fd0805dde";
+   public static final String ShareID = "5d22bec94ca357c136000062";
+   public static final String WX_APPID = "wxed3971fb41174390";
+   public static final String WX_SECRER = "2851fc3b2a10291c7ef6719e4999acdd";
    public static final String QQ_APPID = "1106499610";
    public static final String QQ_SECRET = "mB4XpdFO6laSsV4j";
    public static final String WB_APPID = "761285940";
