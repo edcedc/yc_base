@@ -2,7 +2,6 @@
     <string name="app_name">去转发</string>
     <string name="setting" translatable="false">设置</string>
     <string name="resume" translatable="false">Resume</string>
-    <string name="cancel" translatable="false">取消</string>
     <string name="title_dialog" translatable="false">Tips</string>
     <string name="not_wx_pay" translatable="false">您未安装最新版本微信，不支持微信支付，请安装或升级微信版本</string>
     <string name="message_permission_rationale">授予下列权限以继续程序:\n\n%1$s</string>
@@ -10,4 +9,8 @@
     <string name="message_permission_always_failed">我们需要以下权限，请在设置中为我们开启：\n\n%1$s</string>
     <string name="share_title" translatable="false">神奇动物世界</string>
     <string name="share_content" translatable="false">抢红包，听故事，跟国宝合影</string>
+
+    <string name="submit" translatable="false">确定</string>
+    <string name="cancel" translatable="false">取消</string>
+
 </resources>

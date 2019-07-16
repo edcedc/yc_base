@@ -1,6 +1,4 @@
-package com.yc.quzhaunfa.weight;
-
-/**
+package com.yc.quzhaunfa.weight; /**
  * 作者：yc on 2018/8/8.
  * 邮箱：501807647@qq.com
  * 版本：v1.0
@@ -22,9 +20,11 @@ import android.view.View;
 public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
     private Paint mPaint;
     private int mDividerWidth;
+    private int mDividerHeight;
 
-    public GridDividerItemDecoration(int height, @ColorInt int color) {
-        mDividerWidth = height;
+    public GridDividerItemDecoration(int width, int height, @ColorInt int color) {
+        mDividerWidth = width;
+        mDividerHeight = height;
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(color);
         mPaint.setStyle(Paint.Style.FILL);
@@ -49,7 +49,7 @@ public class GridDividerItemDecoration extends RecyclerView.ItemDecoration {
 
         left = itemPosition % spanCount * dl;
         right = eachWidth - left;
-        bottom = mDividerWidth;
+        bottom = mDividerHeight;
         if (isLastRow){
             bottom = 0;
         }

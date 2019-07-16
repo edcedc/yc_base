@@ -145,7 +145,7 @@ public class LoadingLayout extends FrameLayout {
         }
         View view = getChildAt(0);
         setContentView(view);
-        showLoading();
+        showContent();
     }
 
     private void setContentView(View view) {

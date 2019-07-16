@@ -375,6 +375,35 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
         LogUtils.d("onDetach");
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    protected void setRecyclerViewType(RecyclerView recyclerView){
+        recyclerView.setLayoutManager(new LinearLayoutManager(act));
+        setRecyclerView(recyclerView, R.color.white);
+    }
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    protected void setRecyclerViewType(RecyclerView recyclerView, int baColor){
+        recyclerView.setLayoutManager(new LinearLayoutManager(act));
+        setRecyclerView(recyclerView, baColor);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    protected void setRecyclerViewGridType(RecyclerView recyclerView, int spanCount, int width, int height, int color){
+        recyclerView.setLayoutManager(new GridLayoutManager(act, spanCount));
+        recyclerView.addItemDecoration(new GridDividerItemDecoration(width, height, ContextCompat.getColor(act,color)));
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    protected void setRecyclerViewGridType(RecyclerView recyclerView, int spanCount, int width, int height){
+        recyclerView.setLayoutManager(new GridLayoutManager(act, spanCount));
+        recyclerView.addItemDecoration(new GridDividerItemDecoration(width, height, ContextCompat.getColor(act,R.color.white)));
+    }
+
+    private void setRecyclerView(RecyclerView recyclerView, int baColor){
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setBackgroundColor(ContextCompat.getColor(act,baColor));
+    }
+
     protected void setTitle(String title) {
         title(title, null, -1, true);
     }
@@ -439,25 +468,6 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
             }
         });
     }
-
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    protected void setRecyclerViewType(RecyclerView recyclerView){
-        recyclerView.setLayoutManager(new LinearLayoutManager(act));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setBackgroundColor(ContextCompat.getColor(act,R.color.white));
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    protected void setRecyclerViewGridType(RecyclerView recyclerView, int spanCount, int height, int color){
-        recyclerView.setLayoutManager(new GridLayoutManager(act, spanCount));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setBackgroundColor(ContextCompat.getColor(act,R.color.white));
-        recyclerView.addItemDecoration(new GridDividerItemDecoration(height, ContextCompat.getColor(act,color)));
-    }
-
 
     private CompositeDisposable compositeDisposable;
 
