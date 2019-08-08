@@ -45,6 +45,8 @@ import ezy.ui.layout.LoadingLayout;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import me.yokeyword.fragmentation.SupportActivity;
+import me.yokeyword.fragmentation.SwipeBackLayout;
+import me.yokeyword.fragmentation_swipeback.SwipeBackActivity;
 
 /**
  * 作者：yc on 2018/7/25.
@@ -52,7 +54,7 @@ import me.yokeyword.fragmentation.SupportActivity;
  * 版本：v1.0
  */
 
-public abstract class BaseActivity<P extends BasePresenter, VB extends ViewDataBinding> extends SupportActivity {
+public abstract class BaseActivity<P extends BasePresenter, VB extends ViewDataBinding> extends SwipeBackActivity {
 
     protected Activity act;
     protected VB mB;
@@ -91,6 +93,9 @@ public abstract class BaseActivity<P extends BasePresenter, VB extends ViewDataB
         vLoading = findViewById(R.id.loading);
 
         api = WXAPIFactory.createWXAPI(act, Constants.WX_APPID);
+
+        getSwipeBackLayout().setEdgeOrientation(SwipeBackLayout.EDGE_ALL);
+
     }
 
     protected abstract void initPresenter();
@@ -427,6 +432,14 @@ public abstract class BaseActivity<P extends BasePresenter, VB extends ViewDataB
         return false;
     }
 
-
+    /**
+     * 限制SwipeBack的条件,默认栈内Fragment数 <= 1时 , 优先滑动退出Activity , 而不是Fragment
+     *
+     * @return true: Activity优先滑动退出;  false: Fragment优先滑动退出
+     */
+    @Override
+    public boolean swipeBackPriority() {
+        return super.swipeBackPriority();
+    }
 
 }

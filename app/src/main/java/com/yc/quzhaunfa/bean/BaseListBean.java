@@ -9,33 +9,18 @@ import java.util.List;
 
 public class BaseListBean<T> implements Serializable {
 
-    private int totalRow;
-    private int pageNumber;
+    private int totalCount;
     private int totalPage;
-    private int pageSize;
-    private boolean firstPage;
-    private boolean lastPage;
-    private List<T> list;
-    private String money;
+    private int page;
+    private int size;
+    private List<T> content;
 
-    public String getMoney() {
-        return money;
+    public int getTotalCount() {
+        return totalCount;
     }
 
-    public int getTotalRow() {
-        return totalRow;
-    }
-
-    public void setTotalRow(int totalRow) {
-        this.totalRow = totalRow;
-    }
-
-    public int getPageNumber() {
-        return pageNumber;
-    }
-
-    public void setPageNumber(int pageNumber) {
-        this.pageNumber = pageNumber;
+    public void setTotalCount(int totalCount) {
+        this.totalCount = totalCount;
     }
 
     public int getTotalPage() {
@@ -46,35 +31,27 @@ public class BaseListBean<T> implements Serializable {
         this.totalPage = totalPage;
     }
 
-    public int getPageSize() {
-        return pageSize;
+    public int getPage() {
+        return page;
     }
 
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
+    public void setPage(int page) {
+        this.page = page;
     }
 
-    public boolean isFirstPage() {
-        return firstPage;
+    public int getSize() {
+        return size;
     }
 
-    public void setFirstPage(boolean firstPage) {
-        this.firstPage = firstPage;
-    }
-
-    public boolean isLastPage() {
-        return lastPage;
-    }
-
-    public void setLastPage(boolean lastPage) {
-        this.lastPage = lastPage;
+    public void setSize(int size) {
+        this.size = size;
     }
 
     public List<T> getList() {
-        return list;
+        return content;
     }
 
-    public void setList(List<T> list) {
-        this.list = list;
+    public void setList(List<T> content) {
+        this.content = content;
     }
 }

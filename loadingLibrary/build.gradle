@@ -5,14 +5,15 @@ version='1.0.1'
 archivesBaseName='loadinglayout'
 
 android {
-    compileSdkVersion 24
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
 
-        minSdkVersion 16
-        targetSdkVersion 24
-        versionCode 1
-        versionName version
+        minSdkVersion rootProject.ext.minSdkVersion as Integer
+        targetSdkVersion rootProject.ext.targetSdkVersion as Integer
+        versionCode rootProject.ext.versionCode as Integer
+        versionName rootProject.ext.versionName as String
 
     }
     buildTypes {

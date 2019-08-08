@@ -3,6 +3,8 @@
     <!-- 日历控件需要的 -->
     <dimen name="historyscore_tb">10dp</dimen>
     
+    <dimen name="px1">0.50dp</dimen>
+    <dimen name="px2">1.00dp</dimen>
     <dimen name="px3">1.50dp</dimen>
     <dimen name="px4">2.00dp</dimen>
     <dimen name="px5">2.50dp</dimen>

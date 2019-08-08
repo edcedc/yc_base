@@ -8,6 +8,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
+import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -15,11 +17,15 @@ import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.lcodecore.tkrefreshlayout.header.progresslayout.CircleImageView;
 import com.yc.quzhaunfa.R;
 
+import java.io.File;
 import java.security.MessageDigest;
+import java.util.concurrent.ExecutionException;
 
 import static com.bumptech.glide.load.resource.bitmap.VideoDecoder.FRAME_OPTION;
 
@@ -30,6 +36,7 @@ import static com.bumptech.glide.load.resource.bitmap.VideoDecoder.FRAME_OPTION;
 public class GlideLoadingUtils {
 
     public static void load(Context act, Object url, ImageView imageView) {
+        url = "http://wx1.sinaimg.cn/mw600/007uWeI8ly1g5b00gvgfvj30k00zkn0k.jpg";
         RequestOptions options = new RequestOptions();
         options.placeholder(R.mipmap.place_holder);
         Glide.with(act).load(url).apply(options).into(imageView);
@@ -84,8 +91,41 @@ public class GlideLoadingUtils {
         }).into(imageView);
     }
 
+    public static void saveImage(final Context act, final String url, final String name){
+        ToastUtils.showLong("正在下载，请稍后...");
+        Glide.with(act)
+                .asBitmap()//强制Glide返回一个Bitmap对象
+                .load(url)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        final int width = resource.getWidth();
+                        final int height = resource.getHeight();
+                        new Thread(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            File file = Glide.with(act)
+                                                    .load(url)
+                                                    .downloadOnly(width, height)
+                                                    .get();
+                                            LogUtils.e(file);
+                                            FileSaveUtils.save(file, name);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        } catch (ExecutionException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                        ).start();
 
-   /* *//**
+                    }
+                });
+    }
+
+    /* *//**
      * 设置监听请求接口
      *//*
     public static void loadImageViewListener(Context mContext, String path, ImageView mImageView, RequestListener<Drawable> requstlistener) {

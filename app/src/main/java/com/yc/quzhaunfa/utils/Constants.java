@@ -21,7 +21,7 @@ public class Constants {
 
    public static final String mainPath = Environment.getExternalStorageDirectory() + "/shegou/";
    public static final String imgUrl = mainPath + "img/";
-
+   public static final String videoUrl = mainPath + "video/";
    public static final String ZFB_PAY = "2018102061789029";
 
 }
