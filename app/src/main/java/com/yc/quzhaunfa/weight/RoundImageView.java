@@ -10,13 +10,15 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 
+import androidx.appcompat.widget.AppCompatImageView;
+
 /**
  * 圆角图片
  * 
  * @author edison
  * 
  */
-public class RoundImageView extends android.support.v7.widget.AppCompatImageView {
+public class RoundImageView extends AppCompatImageView {
 	
 	public RoundImageView(Context context, AttributeSet attrs) {
 		super(context, attrs);

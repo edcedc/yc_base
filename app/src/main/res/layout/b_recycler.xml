@@ -8,7 +8,7 @@
 
         <include layout="@layout/include_top" />
 
-        <com.yc.quzhaunfa.weight.LoadingLayout
+        <ezy.ui.layout.LoadingLayout
             android:id="@+id/loadinglayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -19,7 +19,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/white_f4f4f4">
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
 
             </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
 
-        </com.yc.quzhaunfa.weight.LoadingLayout>
+        </ezy.ui.layout.LoadingLayout>
 
     </LinearLayout>
 

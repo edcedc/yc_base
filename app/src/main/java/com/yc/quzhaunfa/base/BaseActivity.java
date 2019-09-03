@@ -3,16 +3,16 @@ package com.yc.quzhaunfa.base;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,9 +29,7 @@ import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.umeng.analytics.MobclickAgent;
-import com.umeng.socialize.UMShareAPI;
 import com.yc.quzhaunfa.R;
-import com.yc.quzhaunfa.base.BasePresenter;
 import com.yc.quzhaunfa.utils.Constants;
 import com.yc.quzhaunfa.utils.TUtil;
 import com.yc.quzhaunfa.utils.pay.PayResult;
@@ -44,7 +42,6 @@ import java.util.Map;
 import ezy.ui.layout.LoadingLayout;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import me.yokeyword.fragmentation.SupportActivity;
 import me.yokeyword.fragmentation.SwipeBackLayout;
 import me.yokeyword.fragmentation_swipeback.SwipeBackActivity;
 
@@ -90,7 +87,7 @@ public abstract class BaseActivity<P extends BasePresenter, VB extends ViewDataB
 
         initView();
 //        vLoading = LoadingLayout.wrap(act);
-        vLoading = findViewById(R.id.loading);
+        vLoading = findViewById(R.id.loadinglayout);
 
         api = WXAPIFactory.createWXAPI(act, Constants.WX_APPID);
 

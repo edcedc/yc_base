@@ -17,21 +17,23 @@ package com.yc.quzhaunfa.base;/*
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,12 +53,12 @@ import com.yc.quzhaunfa.event.PayInEvent;
 import com.yc.quzhaunfa.utils.TUtil;
 import com.yc.quzhaunfa.utils.pay.PayResult;
 import com.yc.quzhaunfa.weight.GridDividerItemDecoration;
-import com.yc.quzhaunfa.weight.LoadingLayout;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.Map;
 
+import ezy.ui.layout.LoadingLayout;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import me.yokeyword.fragmentation_swipeback.SwipeBackFragment;
@@ -148,13 +150,10 @@ public abstract class BaseFragment<P extends BasePresenter, VB extends ViewDataB
     }
 
     protected void showToast(final String str) {
-        act.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
+        act.runOnUiThread(() -> {
 //                ToastUtils.setGravity(Gravity.CENTER, 0, 0);
 //                ToastUtils.showLong(str);
-                ToastUtils.showShort(str);
-            }
+            ToastUtils.showShort(str);
         });
     }
 

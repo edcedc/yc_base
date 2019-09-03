@@ -3,14 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:background="#ffc"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <include layout="@layout/include_top"/>
 
-        <android.support.v7.widget.AppCompatButton
+        <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+            android:id="@+id/refreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -18,5 +23,7 @@
             android:layout_height="wrap_content"
             tools:ignore="MissingConstraints" />
 
-    </android.support.constraint.ConstraintLayout>
+        </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

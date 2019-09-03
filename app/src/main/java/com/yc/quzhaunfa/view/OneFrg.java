@@ -41,31 +41,27 @@ public class OneFrg extends BaseFragment<BasePresenter, FOneBinding> {
     @Override
     protected void initView(View view) {
         setTitle("哈");
-        mB.button.setOnClickListener(new View.OnClickListener() {
+        mB.refreshLayout.startRefresh();
+        mB.button.setOnClickListener(view1 -> ShareTool.getInstance(act).Authorization(new UMAuthListener() {
             @Override
-            public void onClick(View view) {
-                ShareTool.getInstance(act).Authorization(new UMAuthListener() {
-                    @Override
-                    public void onStart(SHARE_MEDIA share_media) {
+            public void onStart(SHARE_MEDIA share_media) {
 
-                    }
-
-                    @Override
-                    public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-                        LogUtils.e(map);
-                    }
-
-                    @Override
-                    public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
-                        LogUtils.e(throwable.getMessage());
-                    }
-
-                    @Override
-                    public void onCancel(SHARE_MEDIA share_media, int i) {
-
-                    }
-                });
             }
-        });
+
+            @Override
+            public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+                LogUtils.e(map);
+            }
+
+            @Override
+            public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+                LogUtils.e(throwable.getMessage());
+            }
+
+            @Override
+            public void onCancel(SHARE_MEDIA share_media, int i) {
+
+            }
+        }));
     }
 }

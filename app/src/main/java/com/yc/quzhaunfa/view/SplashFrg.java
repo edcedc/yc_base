@@ -8,10 +8,11 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.StringUtils;
@@ -24,7 +25,6 @@ import com.yc.quzhaunfa.base.BasePresenter;
 import com.yc.quzhaunfa.controller.UIHelper;
 import com.yc.quzhaunfa.databinding.FSplashBinding;
 import com.yc.quzhaunfa.utils.GlideImageLoader;
-import com.yc.quzhaunfa.utils.cache.ShareIsLoginCache;
 import com.yc.quzhaunfa.utils.cache.ShareSessionIdCache;
 
 import java.util.ArrayList;
